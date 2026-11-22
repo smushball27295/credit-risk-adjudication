@@ -1,0 +1,1509 @@
+{
+  "dataset": "UCI Default of Credit Card Clients (Yeh & Lien 2009), Taiwan, 2005",
+  "seed": 42,
+  "versions": {
+    "python": "3.13.18",
+    "numpy": "2.5.3",
+    "pandas": "3.0.5",
+    "scikit_learn": "1.9.1",
+    "xgboost": "3.4.1"
+  },
+  "data": {
+    "rows": 30000,
+    "default_rate": 0.2212,
+    "education_undocumented_codes": {
+      "0": 14,
+      "5": 280,
+      "6": 51
+    },
+    "marriage_undocumented_code_0": 54,
+    "pay_status_share_minus2": 0.1356388888888889,
+    "pay_status_share_minus1": 0.19244444444444445,
+    "pay_status_share_0": 0.5328833333333334,
+    "pay_status_share_late": 0.13903333333333334,
+    "share_negative_bills": 0.021844444444444444,
+    "share_bill_over_limit_recent": 0.0705,
+    "dormant_accounts": 966,
+    "dormant_default_rate": 0.35921325051759834,
+    "pay_code_evidence": [
+      {
+        "code": "-2",
+        "n": 2759,
+        "default_rate": 0.13229430953243929,
+        "share_bill_zero_or_negative": 0.3272924972816238,
+        "median_utilisation": 0.005403703703703704,
+        "share_paid_august_bill_in_full": 0.9532439289597681
+      },
+      {
+        "code": "-1",
+        "n": 5686,
+        "default_rate": 0.16778051354203308,
+        "share_bill_zero_or_negative": 0.001055223355610271,
+        "median_utilisation": 0.017160194902548727,
+        "share_paid_august_bill_in_full": 0.8009145269081955
+      },
+      {
+        "code": "0",
+        "n": 14737,
+        "default_rate": 0.12811291307593134,
+        "share_bill_zero_or_negative": 0.0,
+        "median_utilisation": 0.6411111111111111,
+        "share_paid_august_bill_in_full": 0.05279229151116238
+      },
+      {
+        "code": "1",
+        "n": 3688,
+        "default_rate": 0.33947939262472887,
+        "share_bill_zero_or_negative": 0.4579718004338395,
+        "median_utilisation": 0.03278865384615384,
+        "share_paid_august_bill_in_full": 0.5005422993492408
+      },
+      {
+        "code": "2 or more",
+        "n": 3130,
+        "default_rate": 0.6955271565495208,
+        "share_bill_zero_or_negative": 0.0,
+        "median_utilisation": 0.7211896825396825,
+        "share_paid_august_bill_in_full": 0.06070287539936102
+      }
+    ]
+  },
+  "split": {
+    "n_train": 18000,
+    "n_valid": 6000,
+    "n_test": 6000,
+    "default_rate_train": 0.2212222222222222,
+    "default_rate_valid": 0.22116666666666668,
+    "default_rate_test": 0.22116666666666668
+  },
+  "features": [
+    "credit_limit",
+    "recent_status",
+    "worst_status_6m",
+    "months_late_6m",
+    "months_since_late",
+    "util_current",
+    "util_avg_6m",
+    "util_trend",
+    "pay_ratio",
+    "last_payment",
+    "months_paid_full",
+    "months_zero_balance"
+  ],
+  "champion_params": {
+    "n_estimators": 200,
+    "max_depth": 3,
+    "learning_rate": 0.05,
+    "tree_method": "hist",
+    "n_jobs": 1
+  },
+  "champion": {
+    "auc": 0.7683586432085683,
+    "gini": 0.5367172864171366,
+    "ks": 0.4181869551243648,
+    "auc_ci_low": 0.7529341179482545,
+    "auc_ci_high": 0.7840008709277866
+  },
+  "benchmark": {
+    "auc": 0.7526667570811558,
+    "gini": 0.5053335141623116,
+    "ks": 0.39761583120077165
+  },
+  "champion_minus_benchmark_auc": {
+    "difference": 0.015691886127412458,
+    "ci_low": 0.010328051148558266,
+    "ci_high": 0.021227367917741262
+  },
+  "auc_train": 0.7870568614550897,
+  "auc_valid": 0.7759087099631661,
+  "train_test_gap": 0.018698218246521403,
+  "with_protected": {
+    "auc": 0.7706539725153929,
+    "auc_gain_over_champion": 0.002295329306824634,
+    "gain_ci_low": -0.00038040923863320495,
+    "gain_ci_high": 0.004696286719721316
+  },
+  "unconstrained": {
+    "auc": 0.7789979343890756,
+    "auc_cost_of_constraints": 0.010639291180507326
+  },
+  "deciles": [
+    {
+      "decile": 1,
+      "n": 600,
+      "defaults": 32,
+      "default_rate": 0.05333333333333334,
+      "avg_score": 0.05211983728137136,
+      "min_score": 0.013556147755108642,
+      "max_score": 0.06701057076471834
+    },
+    {
+      "decile": 2,
+      "n": 600,
+      "defaults": 45,
+      "default_rate": 0.075,
+      "avg_score": 0.07369513070302745,
+      "min_score": 0.06701057076471834,
+      "max_score": 0.08336606225219072
+    },
+    {
+      "decile": 3,
+      "n": 600,
+      "defaults": 55,
+      "default_rate": 0.09166666666666666,
+      "avg_score": 0.09328382408013212,
+      "min_score": 0.08336606225219072,
+      "max_score": 0.10257552803857034
+    },
+    {
+      "decile": 4,
+      "n": 600,
+      "defaults": 72,
+      "default_rate": 0.12,
+      "avg_score": 0.11165708151678329,
+      "min_score": 0.10261374465023769,
+      "max_score": 0.1210420407427127
+    },
+    {
+      "decile": 5,
+      "n": 600,
+      "defaults": 96,
+      "default_rate": 0.16,
+      "avg_score": 0.1310523499653135,
+      "min_score": 0.1210420407427127,
+      "max_score": 0.14088293593210957
+    },
+    {
+      "decile": 6,
+      "n": 600,
+      "defaults": 106,
+      "default_rate": 0.17666666666666667,
+      "avg_score": 0.14997801428828825,
+      "min_score": 0.14092384566177255,
+      "max_score": 0.16008769530031525
+    },
+    {
+      "decile": 7,
+      "n": 600,
+      "defaults": 102,
+      "default_rate": 0.17,
+      "avg_score": 0.1793800566134628,
+      "min_score": 0.16009550149767587,
+      "max_score": 0.21386223365212478
+    },
+    {
+      "decile": 8,
+      "n": 600,
+      "defaults": 160,
+      "default_rate": 0.26666666666666666,
+      "avg_score": 0.2633411230090049,
+      "min_score": 0.2139115012227881,
+      "max_score": 0.32777653576336335
+    },
+    {
+      "decile": 9,
+      "n": 600,
+      "defaults": 245,
+      "default_rate": 0.4083333333333333,
+      "avg_score": 0.4315718046400401,
+      "min_score": 0.32779056220944147,
+      "max_score": 0.5818450016754357
+    },
+    {
+      "decile": 10,
+      "n": 600,
+      "defaults": 414,
+      "default_rate": 0.69,
+      "avg_score": 0.7190354743762798,
+      "min_score": 0.5820149976413878,
+      "max_score": 0.9452532366707855
+    }
+  ],
+  "deciles_monotone": false,
+  "decile_inversions": [
+    7
+  ],
+  "calibration": {
+    "platt_slope_valid": 0.9746104066930202,
+    "platt_intercept_valid": -0.010780816900309704,
+    "tolerance": 0.1,
+    "applied": null,
+    "test_as_used": {
+      "mean_predicted": 0.22051146964737037,
+      "observed_rate": 0.22116666666666668,
+      "brier": 0.13722101181068663,
+      "expected_calibration_error": 0.013309428961279275,
+      "max_band_gap": 0.029035474376279846
+    },
+    "test_raw": {
+      "mean_predicted": 0.22051146964737037,
+      "observed_rate": 0.22116666666666668,
+      "brier": 0.13722101181068663,
+      "expected_calibration_error": 0.013309428961279275,
+      "max_band_gap": 0.029035474376279846
+    },
+    "test_if_platt_applied": {
+      "mean_predicted": 0.22281016427524947,
+      "observed_rate": 0.22116666666666668,
+      "brier": 0.13714783167866243,
+      "expected_calibration_error": 0.011954561867146078,
+      "max_band_gap": 0.024651281075372178
+    }
+  },
+  "cutoff": {
+    "recommended": 0.13,
+    "chosen_on": "validation",
+    "assumptions": {
+      "lgd": 0.75,
+      "annual_margin": 0.12,
+      "exposure": "most recent statement balance, floored at zero",
+      "break_even_pd": 0.13793103448275862
+    },
+    "at_recommended_valid": {
+      "cutoff": 0.13,
+      "approval_rate": 0.44133333333333336,
+      "default_rate_approved": 0.0823262839879154,
+      "defaulters_declined": 0.8357196684250189,
+      "defaulted_balance_declined": 0.7385438337485747,
+      "goods_declined": 0.47999144018831585,
+      "illustrative_profit": 8252344.59,
+      "illustrative_profit_index": 100.0,
+      "illustrative_profit_per_account": 1375.3907649999999
+    },
+    "at_recommended_test": {
+      "cutoff": 0.13,
+      "approval_rate": 0.44133333333333336,
+      "default_rate_approved": 0.09025679758308157,
+      "defaulters_declined": 0.8198944988696307,
+      "defaulted_balance_declined": 0.7035595613450305,
+      "goods_declined": 0.4844853413224909,
+      "illustrative_profit": 5321066.550000001,
+      "illustrative_profit_index": 87.07258869636253,
+      "illustrative_profit_per_account": 886.8444250000001
+    },
+    "best_on_test": 0.12,
+    "sensitivity": [
+      {
+        "lgd": 0.75,
+        "margin": 0.04,
+        "break_even_pd": 0.05063291139240506,
+        "best_cutoff": 0.04,
+        "approval_rate": 0.009666666666666667,
+        "defaulters_declined": 0.9984928409947249,
+        "goods_declined": 0.9880162636421999
+      },
+      {
+        "lgd": 0.75,
+        "margin": 0.08,
+        "break_even_pd": 0.0963855421686747,
+        "best_cutoff": 0.12,
+        "approval_rate": 0.3965,
+        "defaulters_declined": 0.8477769404672193,
+        "goods_declined": 0.53413224909052
+      },
+      {
+        "lgd": 0.75,
+        "margin": 0.12,
+        "break_even_pd": 0.13793103448275862,
+        "best_cutoff": 0.13,
+        "approval_rate": 0.44133333333333336,
+        "defaulters_declined": 0.8198944988696307,
+        "goods_declined": 0.4844853413224909
+      },
+      {
+        "lgd": 0.75,
+        "margin": 0.16,
+        "break_even_pd": 0.1758241758241758,
+        "best_cutoff": 0.13,
+        "approval_rate": 0.44133333333333336,
+        "defaulters_declined": 0.8198944988696307,
+        "goods_declined": 0.4844853413224909
+      },
+      {
+        "lgd": 0.75,
+        "margin": 0.2,
+        "break_even_pd": 0.2105263157894737,
+        "best_cutoff": 0.19,
+        "approval_rate": 0.6755,
+        "defaulters_declined": 0.6352675207234363,
+        "goods_declined": 0.2362508024823454
+      },
+      {
+        "lgd": 0.5,
+        "margin": 0.12,
+        "break_even_pd": 0.1935483870967742,
+        "best_cutoff": 0.19,
+        "approval_rate": 0.6755,
+        "defaulters_declined": 0.6352675207234363,
+        "goods_declined": 0.2362508024823454
+      }
+    ],
+    "grid_test": [
+      {
+        "cutoff": 0.04,
+        "approval_rate": 0.009666666666666667,
+        "default_rate_approved": 0.034482758620689655,
+        "defaulters_declined": 0.9984928409947249,
+        "defaulted_balance_declined": 0.9992055956962596,
+        "goods_declined": 0.9880162636421999,
+        "illustrative_profit": 341020.01999999996,
+        "illustrative_profit_index": 5.580365451111548,
+        "illustrative_profit_per_account": 56.83666999999999
+      },
+      {
+        "cutoff": 0.05,
+        "approval_rate": 0.03783333333333333,
+        "default_rate_approved": 0.03524229074889868,
+        "defaulters_declined": 0.9939713639788997,
+        "defaulted_balance_declined": 0.9968954541843887,
+        "goods_declined": 0.9531350310293174,
+        "illustrative_profit": 1492349.8499999999,
+        "illustrative_profit_index": 24.420435914324038,
+        "illustrative_profit_per_account": 248.72497499999997
+      },
+      {
+        "cutoff": 0.06,
+        "approval_rate": 0.078,
+        "default_rate_approved": 0.04700854700854701,
+        "defaulters_declined": 0.9834212509419744,
+        "defaulted_balance_declined": 0.9811099356750167,
+        "goods_declined": 0.9045580997218061,
+        "illustrative_profit": 2460828.6599999997,
+        "illustrative_profit_index": 40.26837848220502,
+        "illustrative_profit_per_account": 410.1381099999999
+      },
+      {
+        "cutoff": 0.07,
+        "approval_rate": 0.13333333333333333,
+        "default_rate_approved": 0.05875,
+        "defaulters_declined": 0.9645817633760362,
+        "defaulted_balance_declined": 0.9675675827560358,
+        "goods_declined": 0.838861545046009,
+        "illustrative_profit": 3731438.25,
+        "illustrative_profit_index": 61.06031280291444,
+        "illustrative_profit_per_account": 621.906375
+      },
+      {
+        "cutoff": 0.08,
+        "approval_rate": 0.18416666666666667,
+        "default_rate_approved": 0.06334841628959276,
+        "defaulters_declined": 0.947249434815373,
+        "defaulted_balance_declined": 0.9376395446297435,
+        "goods_declined": 0.7785148726728012,
+        "illustrative_profit": 4487100.3,
+        "illustrative_profit_index": 73.42577567672498,
+        "illustrative_profit_per_account": 747.85005
+      },
+      {
+        "cutoff": 0.09,
+        "approval_rate": 0.23266666666666666,
+        "default_rate_approved": 0.06876790830945559,
+        "defaulters_declined": 0.9276563677467973,
+        "defaulted_balance_declined": 0.9086292475984449,
+        "goods_declined": 0.7218061202653542,
+        "illustrative_profit": 5151876.09,
+        "illustrative_profit_index": 84.30399875363227,
+        "illustrative_profit_per_account": 858.6460149999999
+      },
+      {
+        "cutoff": 0.1,
+        "approval_rate": 0.27666666666666667,
+        "default_rate_approved": 0.07349397590361446,
+        "defaulters_declined": 0.9080633006782216,
+        "defaulted_balance_declined": 0.8685339226500807,
+        "goods_declined": 0.6708752407447036,
+        "illustrative_profit": 5377169.4,
+        "illustrative_profit_index": 87.99064155979528,
+        "illustrative_profit_per_account": 896.1949000000001
+      },
+      {
+        "cutoff": 0.11,
+        "approval_rate": 0.3416666666666667,
+        "default_rate_approved": 0.07902439024390244,
+        "defaulters_declined": 0.8779201205727204,
+        "defaulted_balance_declined": 0.8098318690285781,
+        "goods_declined": 0.5959768885084528,
+        "illustrative_profit": 5959956.1499999985,
+        "illustrative_profit_index": 97.52721670006292,
+        "illustrative_profit_per_account": 993.3260249999997
+      },
+      {
+        "cutoff": 0.12,
+        "approval_rate": 0.3965,
+        "default_rate_approved": 0.08490962589323245,
+        "defaulters_declined": 0.8477769404672193,
+        "defaulted_balance_declined": 0.758593891596743,
+        "goods_declined": 0.53413224909052,
+        "illustrative_profit": 6111069.66,
+        "illustrative_profit_index": 100.0,
+        "illustrative_profit_per_account": 1018.51161
+      },
+      {
+        "cutoff": 0.13,
+        "approval_rate": 0.44133333333333336,
+        "default_rate_approved": 0.09025679758308157,
+        "defaulters_declined": 0.8198944988696307,
+        "defaulted_balance_declined": 0.7035595613450305,
+        "goods_declined": 0.4844853413224909,
+        "illustrative_profit": 5321066.550000001,
+        "illustrative_profit_index": 87.07258869636253,
+        "illustrative_profit_per_account": 886.8444250000001
+      },
+      {
+        "cutoff": 0.14,
+        "approval_rate": 0.49266666666666664,
+        "default_rate_approved": 0.09810554803788904,
+        "defaulters_declined": 0.7814619442351168,
+        "defaulted_balance_declined": 0.6792883050868146,
+        "goods_declined": 0.42948855125187246,
+        "illustrative_profit": 5124228.239999998,
+        "illustrative_profit_index": 83.85157632125565,
+        "illustrative_profit_per_account": 854.0380399999997
+      },
+      {
+        "cutoff": 0.15,
+        "approval_rate": 0.5518333333333333,
+        "default_rate_approved": 0.10601026880096648,
+        "defaulters_declined": 0.7354935945742276,
+        "defaulted_balance_declined": 0.6569455688247171,
+        "goods_declined": 0.3665739353734218,
+        "illustrative_profit": 5066273.43,
+        "illustrative_profit_index": 82.90321845226683,
+        "illustrative_profit_per_account": 844.3789049999999
+      },
+      {
+        "cutoff": 0.16,
+        "approval_rate": 0.5996666666666667,
+        "default_rate_approved": 0.11284046692607004,
+        "defaulters_declined": 0.6940467219291635,
+        "defaulted_balance_declined": 0.6364010431354817,
+        "goods_declined": 0.3169270276053927,
+        "illustrative_profit": 4831361.129999999,
+        "illustrative_profit_index": 79.05917292391,
+        "illustrative_profit_per_account": 805.2268549999998
+      },
+      {
+        "cutoff": 0.17,
+        "approval_rate": 0.6353333333333333,
+        "default_rate_approved": 0.11594963273871983,
+        "defaulters_declined": 0.6669178598342125,
+        "defaulted_balance_declined": 0.6265744489253144,
+        "goods_declined": 0.2788358656109566,
+        "illustrative_profit": 4977153.509999998,
+        "illustrative_profit_index": 81.4448825968709,
+        "illustrative_profit_per_account": 829.5255849999996
+      },
+      {
+        "cutoff": 0.18,
+        "approval_rate": 0.6596666666666666,
+        "default_rate_approved": 0.11824153612935827,
+        "defaulters_declined": 0.6473247927656368,
+        "defaulted_balance_declined": 0.6165318666602619,
+        "goods_declined": 0.2531564305585277,
+        "illustrative_profit": 4870559.489999998,
+        "illustrative_profit_index": 79.70060498377624,
+        "illustrative_profit_per_account": 811.7599149999998
+      },
+      {
+        "cutoff": 0.19,
+        "approval_rate": 0.6755,
+        "default_rate_approved": 0.11941771527263756,
+        "defaulters_declined": 0.6352675207234363,
+        "defaulted_balance_declined": 0.6093792842567974,
+        "goods_declined": 0.2362508024823454,
+        "illustrative_profit": 4774703.25,
+        "illustrative_profit_index": 78.13203768978147,
+        "illustrative_profit_per_account": 795.783875
+      },
+      {
+        "cutoff": 0.2,
+        "approval_rate": 0.6863333333333334,
+        "default_rate_approved": 0.1209324915007285,
+        "defaulters_declined": 0.624717407686511,
+        "defaulted_balance_declined": 0.6047541545847976,
+        "goods_declined": 0.22533704258506312,
+        "illustrative_profit": 4733638.77,
+        "illustrative_profit_index": 77.46006891369652,
+        "illustrative_profit_per_account": 788.9397949999999
+      },
+      {
+        "cutoff": 0.21,
+        "approval_rate": 0.6951666666666667,
+        "default_rate_approved": 0.12083433229441382,
+        "defaulters_declined": 0.6201959306706858,
+        "defaulted_balance_declined": 0.6037098802894234,
+        "goods_declined": 0.21527926385619517,
+        "illustrative_profit": 4893496.859999999,
+        "illustrative_profit_index": 80.07594631150054,
+        "illustrative_profit_per_account": 815.5828099999999
+      },
+      {
+        "cutoff": 0.22,
+        "approval_rate": 0.7045,
+        "default_rate_approved": 0.12088951975396262,
+        "defaulters_declined": 0.6149208741522231,
+        "defaulted_balance_declined": 0.6035692531548447,
+        "goods_declined": 0.20479349454312004,
+        "illustrative_profit": 5003218.289999999,
+        "illustrative_profit_index": 81.87140007171836,
+        "illustrative_profit_per_account": 833.8697149999998
+      },
+      {
+        "cutoff": 0.23,
+        "approval_rate": 0.7156666666666667,
+        "default_rate_approved": 0.12179785747554728,
+        "defaulters_declined": 0.6058779201205727,
+        "defaulted_balance_declined": 0.6026356340833492,
+        "goods_declined": 0.1930237534774235,
+        "illustrative_profit": 5161155.27,
+        "illustrative_profit_index": 84.45584091083654,
+        "illustrative_profit_per_account": 860.1925449999999
+      },
+      {
+        "cutoff": 0.24,
+        "approval_rate": 0.7266666666666667,
+        "default_rate_approved": 0.12270642201834862,
+        "defaulters_declined": 0.5968349660889224,
+        "defaulted_balance_declined": 0.5975865416249256,
+        "goods_declined": 0.1814680077038305,
+        "illustrative_profit": 5028706.919999998,
+        "illustrative_profit_index": 82.2884895735258,
+        "illustrative_profit_per_account": 838.1178199999997
+      },
+      {
+        "cutoff": 0.25,
+        "approval_rate": 0.7366666666666667,
+        "default_rate_approved": 0.1242081447963801,
+        "defaulters_declined": 0.586284853051997,
+        "defaulted_balance_declined": 0.5871124143936592,
+        "goods_declined": 0.1716242242670661,
+        "illustrative_profit": 4618483.169999998,
+        "illustrative_profit_index": 75.57569176850126,
+        "illustrative_profit_per_account": 769.7471949999997
+      },
+      {
+        "cutoff": 0.26,
+        "approval_rate": 0.7455,
+        "default_rate_approved": 0.1256427453610552,
+        "defaulters_declined": 0.5764883195177091,
+        "defaulted_balance_declined": 0.5837456886945195,
+        "goods_declined": 0.16306441258292317,
+        "illustrative_profit": 4570553.969999999,
+        "illustrative_profit_index": 74.79139044865671,
+        "illustrative_profit_per_account": 761.7589949999998
+      },
+      {
+        "cutoff": 0.27,
+        "approval_rate": 0.7646666666666667,
+        "default_rate_approved": 0.1309938971229294,
+        "defaulters_declined": 0.5470987189148455,
+        "defaulted_balance_declined": 0.5763009693638458,
+        "goods_declined": 0.14680077038305156,
+        "illustrative_profit": 4364575.349999998,
+        "illustrative_profit_index": 71.42080834994111,
+        "illustrative_profit_per_account": 727.4292249999996
+      },
+      {
+        "cutoff": 0.28,
+        "approval_rate": 0.7723333333333333,
+        "default_rate_approved": 0.13141993957703926,
+        "defaulters_declined": 0.5410700828937453,
+        "defaulted_balance_declined": 0.5746171159026424,
+        "goods_declined": 0.13866894928311577,
+        "illustrative_profit": 4367613.48,
+        "illustrative_profit_index": 71.47052354170023,
+        "illustrative_profit_per_account": 727.9355800000001
+      },
+      {
+        "cutoff": 0.29,
+        "approval_rate": 0.7791666666666667,
+        "default_rate_approved": 0.1332620320855615,
+        "defaulters_declined": 0.5305199698568199,
+        "defaulted_balance_declined": 0.5723852938478982,
+        "goods_declined": 0.13289107639631928,
+        "illustrative_profit": 4373034.989999998,
+        "illustrative_profit_index": 71.55923976163606,
+        "illustrative_profit_per_account": 728.8391649999998
+      },
+      {
+        "cutoff": 0.3,
+        "approval_rate": 0.7868333333333334,
+        "default_rate_approved": 0.1345054013980089,
+        "defaulters_declined": 0.5214770158251696,
+        "defaulted_balance_declined": 0.5605747851280866,
+        "goods_declined": 0.12561523646479777,
+        "illustrative_profit": 3925184.009999998,
+        "illustrative_profit_index": 64.23071947113098,
+        "illustrative_profit_per_account": 654.1973349999996
+      },
+      {
+        "cutoff": 0.31,
+        "approval_rate": 0.7921666666666667,
+        "default_rate_approved": 0.1367557332211235,
+        "defaulters_declined": 0.5101733232856066,
+        "defaulted_balance_declined": 0.5568705483591502,
+        "goods_declined": 0.12197731649903702,
+        "illustrative_profit": 3810869.1899999976,
+        "illustrative_profit_index": 62.36010063743894,
+        "illustrative_profit_per_account": 635.1448649999996
+      },
+      {
+        "cutoff": 0.32,
+        "approval_rate": 0.7976666666666666,
+        "default_rate_approved": 0.13873798579189303,
+        "defaulters_declined": 0.4996232102486812,
+        "defaulted_balance_declined": 0.5538491983829619,
+        "goods_declined": 0.11791140594906913,
+        "illustrative_profit": 3729990.0,
+        "illustrative_profit_index": 61.03661400580402,
+        "illustrative_profit_per_account": 621.665
+      },
+      {
+        "cutoff": 0.33,
+        "approval_rate": 0.8013333333333333,
+        "default_rate_approved": 0.1391430948419301,
+        "defaulters_declined": 0.4958553127354936,
+        "defaulted_balance_declined": 0.5474063674759335,
+        "goods_declined": 0.11427348598330837,
+        "illustrative_profit": 3442662.719999999,
+        "illustrative_profit_index": 56.33486298698154,
+        "illustrative_profit_per_account": 573.7771199999999
+      },
+      {
+        "cutoff": 0.34,
+        "approval_rate": 0.8063333333333333,
+        "default_rate_approved": 0.1399338569656883,
+        "defaulters_declined": 0.4898266767143934,
+        "defaulted_balance_declined": 0.541026959272797,
+        "goods_declined": 0.10956558955702975,
+        "illustrative_profit": 3238929.0599999987,
+        "illustrative_profit_index": 53.00101684653352,
+        "illustrative_profit_per_account": 539.8215099999998
+      },
+      {
+        "cutoff": 0.35,
+        "approval_rate": 0.81,
+        "default_rate_approved": 0.1411522633744856,
+        "defaulters_declined": 0.48304446119065564,
+        "defaulted_balance_declined": 0.5348600453750346,
+        "goods_declined": 0.10678365075968328,
+        "illustrative_profit": 3008869.9499999993,
+        "illustrative_profit_index": 49.236387693214404,
+        "illustrative_profit_per_account": 501.47832499999987
+      },
+      {
+        "cutoff": 0.36,
+        "approval_rate": 0.8161666666666667,
+        "default_rate_approved": 0.14192362671023076,
+        "defaulters_declined": 0.4762622456669179,
+        "defaulted_balance_declined": 0.5294741851977742,
+        "goods_declined": 0.10079178258078322,
+        "illustrative_profit": 2842770.4800000004,
+        "illustrative_profit_index": 46.51837792992856,
+        "illustrative_profit_per_account": 473.7950800000001
+      },
+      {
+        "cutoff": 0.37,
+        "approval_rate": 0.821,
+        "default_rate_approved": 0.14291514413317094,
+        "defaulters_declined": 0.4694800301431801,
+        "defaulted_balance_declined": 0.5246011925817321,
+        "goods_declined": 0.09651187673871175,
+        "illustrative_profit": 2706815.2799999975,
+        "illustrative_profit_index": 44.293641385197326,
+        "illustrative_profit_per_account": 451.1358799999996
+      },
+      {
+        "cutoff": 0.38,
+        "approval_rate": 0.8238333333333333,
+        "default_rate_approved": 0.14383977341695325,
+        "defaulters_declined": 0.4642049736247174,
+        "defaulted_balance_declined": 0.509592936702967,
+        "goods_declined": 0.094371923817676,
+        "illustrative_profit": 2026429.919999998,
+        "illustrative_profit_index": 33.15998724845166,
+        "illustrative_profit_per_account": 337.7383199999997
+      },
+      {
+        "cutoff": 0.39,
+        "approval_rate": 0.8261666666666667,
+        "default_rate_approved": 0.14504740770627395,
+        "defaulters_declined": 0.4581763376036172,
+        "defaulted_balance_declined": 0.5072839994196511,
+        "goods_declined": 0.09308795206505457,
+        "illustrative_profit": 1943353.1400000006,
+        "illustrative_profit_index": 31.800539809261487,
+        "illustrative_profit_per_account": 323.8921900000001
+      },
+      {
+        "cutoff": 0.4,
+        "approval_rate": 0.8428333333333333,
+        "default_rate_approved": 0.1510777140597192,
+        "defaulters_declined": 0.4242652599849284,
+        "defaulted_balance_declined": 0.504352669244697,
+        "goods_declined": 0.08131821099935801,
+        "illustrative_profit": 1871030.6400000006,
+        "illustrative_profit_index": 30.61707269100252,
+        "illustrative_profit_per_account": 311.8384400000001
+      },
+      {
+        "cutoff": 0.41,
+        "approval_rate": 0.8511666666666666,
+        "default_rate_approved": 0.1515566869003329,
+        "defaulters_declined": 0.4167294649585531,
+        "defaulted_balance_declined": 0.5030501548258812,
+        "goods_declined": 0.07275839931521506,
+        "illustrative_profit": 1881023.789999999,
+        "illustrative_profit_index": 30.78059807290757,
+        "illustrative_profit_per_account": 313.5039649999998
+      },
+      {
+        "cutoff": 0.42,
+        "approval_rate": 0.8545,
+        "default_rate_approved": 0.15291593524478253,
+        "defaulters_declined": 0.4091936699321778,
+        "defaulted_balance_declined": 0.4990028913230263,
+        "goods_declined": 0.07061844639417933,
+        "illustrative_profit": 1716904.8599999994,
+        "illustrative_profit_index": 28.094997365813033,
+        "illustrative_profit_per_account": 286.1508099999999
+      },
+      {
+        "cutoff": 0.43,
+        "approval_rate": 0.8566666666666667,
+        "default_rate_approved": 0.15369649805447472,
+        "defaulters_declined": 0.4046721929163527,
+        "defaulted_balance_declined": 0.4976093758797094,
+        "goods_declined": 0.06912047934945431,
+        "illustrative_profit": 1678520.4599999972,
+        "illustrative_profit_index": 27.4668847417458,
+        "illustrative_profit_per_account": 279.7534099999995
+      },
+      {
+        "cutoff": 0.44,
+        "approval_rate": 0.8595,
+        "default_rate_approved": 0.15474112856311809,
+        "defaulters_declined": 0.39864355689525244,
+        "defaulted_balance_declined": 0.4894821265647482,
+        "goods_declined": 0.06719452172052215,
+        "illustrative_profit": 1291055.25,
+        "illustrative_profit_index": 21.126501935505672,
+        "illustrative_profit_per_account": 215.175875
+      },
+      {
+        "cutoff": 0.45,
+        "approval_rate": 0.8623333333333333,
+        "default_rate_approved": 0.155585620409741,
+        "defaulters_declined": 0.3933685003767898,
+        "defaulted_balance_declined": 0.4878247512647336,
+        "goods_declined": 0.06505456879948641,
+        "illustrative_profit": 1282187.6099999994,
+        "illustrative_profit_index": 20.98139411488887,
+        "illustrative_profit_per_account": 213.6979349999999
+      },
+      {
+        "cutoff": 0.46,
+        "approval_rate": 0.8651666666666666,
+        "default_rate_approved": 0.15719514544403776,
+        "defaulters_declined": 0.3850791258477769,
+        "defaulted_balance_declined": 0.48223039601026296,
+        "goods_declined": 0.06377059704686497,
+        "illustrative_profit": 1034943.7799999975,
+        "illustrative_profit_index": 16.935558545081246,
+        "illustrative_profit_per_account": 172.49062999999958
+      },
+      {
+        "cutoff": 0.47,
+        "approval_rate": 0.8675,
+        "default_rate_approved": 0.1575408261287224,
+        "defaulters_declined": 0.38206480783722685,
+        "defaulted_balance_declined": 0.4798713420052359,
+        "goods_declined": 0.061630644125829234,
+        "illustrative_profit": 964222.2300000004,
+        "illustrative_profit_index": 15.778288968154234,
+        "illustrative_profit_per_account": 160.70370500000007
+      },
+      {
+        "cutoff": 0.48,
+        "approval_rate": 0.8718333333333333,
+        "default_rate_approved": 0.1592429745746511,
+        "defaulters_declined": 0.37226827430293896,
+        "defaulted_balance_declined": 0.46786561445635644,
+        "goods_declined": 0.05884870532848277,
+        "illustrative_profit": 434475.3599999994,
+        "illustrative_profit_index": 7.109645024075857,
+        "illustrative_profit_per_account": 72.4125599999999
+      },
+      {
+        "cutoff": 0.49,
+        "approval_rate": 0.8751666666666666,
+        "default_rate_approved": 0.16054084936202628,
+        "defaulters_declined": 0.36473247927656366,
+        "defaulted_balance_declined": 0.4630494881887405,
+        "goods_declined": 0.056708752407447036,
+        "illustrative_profit": 236820.1499999985,
+        "illustrative_profit_index": 3.8752651037526955,
+        "illustrative_profit_per_account": 39.47002499999975
+      },
+      {
+        "cutoff": 0.5,
+        "approval_rate": 0.8793333333333333,
+        "default_rate_approved": 0.16205458680818802,
+        "defaulters_declined": 0.3556895252449133,
+        "defaulted_balance_declined": 0.4562611031545302,
+        "goods_declined": 0.05392681361010058,
+        "illustrative_profit": -6834.660000000149,
+        "illustrative_profit_index": -0.11184064951405166,
+        "illustrative_profit_per_account": -1.139110000000025
+      },
+      {
+        "cutoff": 0.51,
+        "approval_rate": 0.8825,
+        "default_rate_approved": 0.16279508970727102,
+        "defaulters_declined": 0.35041446872645066,
+        "defaulted_balance_declined": 0.4511731334409081,
+        "goods_declined": 0.05135887010485769,
+        "illustrative_profit": -205711.01999999955,
+        "illustrative_profit_index": -3.366203159922735,
+        "illustrative_profit_per_account": -34.28516999999992
+      },
+      {
+        "cutoff": 0.52,
+        "approval_rate": 0.8853333333333333,
+        "default_rate_approved": 0.16378012048192772,
+        "defaulters_declined": 0.3443858327053504,
+        "defaulted_balance_declined": 0.45008412428477185,
+        "goods_declined": 0.04943291247592553,
+        "illustrative_profit": -231059.2800000012,
+        "illustrative_profit_index": -3.7809956825136433,
+        "illustrative_profit_per_account": -38.5098800000002
+      },
+      {
+        "cutoff": 0.53,
+        "approval_rate": 0.8908333333333334,
+        "default_rate_approved": 0.166510757717493,
+        "defaulters_declined": 0.32931424265259984,
+        "defaulted_balance_declined": 0.4352134329346311,
+        "goods_declined": 0.04665097367857907,
+        "illustrative_profit": -926549.4900000021,
+        "illustrative_profit_index": -15.16182176853147,
+        "illustrative_profit_per_account": -154.42491500000034
+      },
+      {
+        "cutoff": 0.54,
+        "approval_rate": 0.8931666666666667,
+        "default_rate_approved": 0.1670087702929651,
+        "defaulters_declined": 0.3255463451394122,
+        "defaulted_balance_declined": 0.43384232208924317,
+        "goods_declined": 0.04472501604964691,
+        "illustrative_profit": -967213.6799999997,
+        "illustrative_profit_index": -15.827240300186656,
+        "illustrative_profit_per_account": -161.20227999999994
+      },
+      {
+        "cutoff": 0.55,
+        "approval_rate": 0.8966666666666666,
+        "default_rate_approved": 0.16821561338289961,
+        "defaulters_declined": 0.3180105501130369,
+        "defaulted_balance_declined": 0.43087791279657717,
+        "goods_declined": 0.0423710678365076,
+        "illustrative_profit": -1103662.0500000007,
+        "illustrative_profit_index": -18.060046954202136,
+        "illustrative_profit_per_account": -183.94367500000013
+      },
+      {
+        "cutoff": 0.56,
+        "approval_rate": 0.8978333333333334,
+        "default_rate_approved": 0.1687395581956562,
+        "defaulters_declined": 0.31499623210248684,
+        "defaulted_balance_declined": 0.41800155773653735,
+        "goods_declined": 0.041729081960196875,
+        "illustrative_profit": -1739497.710000001,
+        "illustrative_profit_index": -28.464701055297756,
+        "illustrative_profit_per_account": -289.91628500000013
+      },
+      {
+        "cutoff": 0.57,
+        "approval_rate": 0.899,
+        "default_rate_approved": 0.16870596959584724,
+        "defaulters_declined": 0.3142426525998493,
+        "defaulted_balance_declined": 0.4156218088407889,
+        "goods_declined": 0.040445110207575435,
+        "illustrative_profit": -1832079.4200000018,
+        "illustrative_profit_index": -29.9796847676582,
+        "illustrative_profit_per_account": -305.34657000000027
+      },
+      {
+        "cutoff": 0.58,
+        "approval_rate": 0.8998333333333334,
+        "default_rate_approved": 0.16892017040192628,
+        "defaulters_declined": 0.31273549359457425,
+        "defaulted_balance_declined": 0.41280458303816725,
+        "goods_declined": 0.03980312433126471,
+        "illustrative_profit": -1963826.0700000003,
+        "illustrative_profit_index": -32.13555366344818,
+        "illustrative_profit_per_account": -327.30434500000007
+      },
+      {
+        "cutoff": 0.59,
+        "approval_rate": 0.9011666666666667,
+        "default_rate_approved": 0.1695949694840022,
+        "defaulters_declined": 0.3089675960813866,
+        "defaulted_balance_declined": 0.41218682865651846,
+        "goods_declined": 0.03916113845495399,
+        "illustrative_profit": -1992390.990000002,
+        "illustrative_profit_index": -32.6029827976139,
+        "illustrative_profit_per_account": -332.0651650000003
+      },
+      {
+        "cutoff": 0.6,
+        "approval_rate": 0.9026666666666666,
+        "default_rate_approved": 0.1700516986706056,
+        "defaulters_declined": 0.3059532780708365,
+        "defaulted_balance_declined": 0.4088453917570318,
+        "goods_declined": 0.03809116199443612,
+        "illustrative_profit": -2130138.960000001,
+        "illustrative_profit_index": -34.857055777695074,
+        "illustrative_profit_per_account": -355.02316000000013
+      },
+      {
+        "cutoff": 0.61,
+        "approval_rate": 0.9038333333333334,
+        "default_rate_approved": 0.1711229946524064,
+        "defaulters_declined": 0.3006782215523738,
+        "defaulted_balance_declined": 0.40353099734104847,
+        "goods_declined": 0.03809116199443612,
+        "illustrative_profit": -2398235.460000001,
+        "illustrative_profit_index": -39.24411917111089,
+        "illustrative_profit_per_account": -399.70591000000013
+      },
+      {
+        "cutoff": 0.62,
+        "approval_rate": 0.9051666666666667,
+        "default_rate_approved": 0.17142331062419444,
+        "defaulters_declined": 0.2984174830444612,
+        "defaulted_balance_declined": 0.3929367594616944,
+        "goods_declined": 0.037021185533918255,
+        "illustrative_profit": -2897705.8200000003,
+        "illustrative_profit_index": -47.41732595468401,
+        "illustrative_profit_per_account": -482.95097000000004
+      },
+      {
+        "cutoff": 0.63,
+        "approval_rate": 0.9066666666666666,
+        "default_rate_approved": 0.17169117647058824,
+        "defaulters_declined": 0.2961567445365486,
+        "defaulted_balance_declined": 0.3861229815586967,
+        "goods_declined": 0.03573721378129681,
+        "illustrative_profit": -3138647.790000003,
+        "illustrative_profit_index": -51.36003947956965,
+        "illustrative_profit_per_account": -523.1079650000005
+      },
+      {
+        "cutoff": 0.64,
+        "approval_rate": 0.9083333333333333,
+        "default_rate_approved": 0.1728440366972477,
+        "defaulters_declined": 0.2901281085154484,
+        "defaulted_balance_declined": 0.3620664645257535,
+        "goods_declined": 0.035309223197089665,
+        "illustrative_profit": -4336060.5,
+        "illustrative_profit_index": -70.95419854860565,
+        "illustrative_profit_per_account": -722.67675
+      },
+      {
+        "cutoff": 0.65,
+        "approval_rate": 0.9108333333333334,
+        "default_rate_approved": 0.17401646843549862,
+        "defaulters_declined": 0.28334589299171065,
+        "defaulted_balance_declined": 0.3371196211812147,
+        "goods_declined": 0.03402525144446822,
+        "illustrative_profit": -5548435.949999999,
+        "illustrative_profit_index": -90.79320411477683,
+        "illustrative_profit_per_account": -924.7393249999999
+      },
+      {
+        "cutoff": 0.66,
+        "approval_rate": 0.9131666666666667,
+        "default_rate_approved": 0.17466691002007664,
+        "defaulters_declined": 0.2788244159758855,
+        "defaulted_balance_declined": 0.3302724222190635,
+        "goods_declined": 0.032313289107639635,
+        "illustrative_profit": -5724749.280000001,
+        "illustrative_profit_index": -93.67835090264707,
+        "illustrative_profit_per_account": -954.1248800000002
+      },
+      {
+        "cutoff": 0.67,
+        "approval_rate": 0.9156666666666666,
+        "default_rate_approved": 0.1756461594466691,
+        "defaulters_declined": 0.2727957799547852,
+        "defaulted_balance_declined": 0.320370942833204,
+        "goods_declined": 0.030815322062914617,
+        "illustrative_profit": -6179824.41,
+        "illustrative_profit_index": -101.12508535862443,
+        "illustrative_profit_per_account": -1029.970735
+      },
+      {
+        "cutoff": 0.68,
+        "approval_rate": 0.9228333333333333,
+        "default_rate_approved": 0.17933899223406177,
+        "defaulters_declined": 0.25169555388093445,
+        "defaulted_balance_declined": 0.29287941588195193,
+        "goods_declined": 0.02760539268136101,
+        "illustrative_profit": -7463322.870000001,
+        "illustrative_profit_index": -122.12792989173684,
+        "illustrative_profit_per_account": -1243.8871450000001
+      },
+      {
+        "cutoff": 0.69,
+        "approval_rate": 0.927,
+        "default_rate_approved": 0.18122977346278318,
+        "defaulters_declined": 0.24039186134137153,
+        "defaulted_balance_declined": 0.2684433289819055,
+        "goods_declined": 0.025465439760325274,
+        "illustrative_profit": -8566655.07,
+        "illustrative_profit_index": -140.1825792638731,
+        "illustrative_profit_per_account": -1427.7758450000001
+      },
+      {
+        "cutoff": 0.7,
+        "approval_rate": 0.9328333333333333,
+        "default_rate_approved": 0.18438449169197785,
+        "defaulters_declined": 0.22230595327807084,
+        "defaulted_balance_declined": 0.24979131536829494,
+        "goods_declined": 0.02311149154718596,
+        "illustrative_profit": -9425293.41,
+        "illustrative_profit_index": -154.23312013105084,
+        "illustrative_profit_per_account": -1570.882235
+      },
+      {
+        "cutoff": 0.71,
+        "approval_rate": 0.9391666666666667,
+        "default_rate_approved": 0.18775510204081633,
+        "defaulters_declined": 0.2027128862094951,
+        "defaulted_balance_declined": 0.21656444921953277,
+        "goods_declined": 0.020543548041943076,
+        "illustrative_profit": -10965252.870000001,
+        "illustrative_profit_index": -179.43262767520147,
+        "illustrative_profit_per_account": -1827.5421450000001
+      },
+      {
+        "cutoff": 0.72,
+        "approval_rate": 0.947,
+        "default_rate_approved": 0.19165786694825765,
+        "defaulters_declined": 0.17935192162773173,
+        "defaulted_balance_declined": 0.18955999555119318,
+        "goods_declined": 0.0171196233682859,
+        "illustrative_profit": -12168454.71,
+        "illustrative_profit_index": -199.12151860497693,
+        "illustrative_profit_per_account": -2028.0757850000002
+      },
+      {
+        "cutoff": 0.73,
+        "approval_rate": 0.9566666666666667,
+        "default_rate_approved": 0.19686411149825783,
+        "defaulters_declined": 0.14845516201959308,
+        "defaulted_balance_declined": 0.14800215732342156,
+        "goods_declined": 0.013481703402525145,
+        "illustrative_profit": -14151544.470000003,
+        "illustrative_profit_index": -231.57229842475732,
+        "illustrative_profit_per_account": -2358.5907450000004
+      },
+      {
+        "cutoff": 0.74,
+        "approval_rate": 0.9618333333333333,
+        "default_rate_approved": 0.19944550337896377,
+        "defaulters_declined": 0.13262999246420498,
+        "defaulted_balance_declined": 0.12337724441256162,
+        "goods_declined": 0.011341750481489407,
+        "illustrative_profit": -15312675.420000002,
+        "illustrative_profit_index": -250.5727519394698,
+        "illustrative_profit_per_account": -2552.1125700000002
+      },
+      {
+        "cutoff": 0.75,
+        "approval_rate": 0.9671666666666666,
+        "default_rate_approved": 0.20230915043942788,
+        "defaulters_declined": 0.11529766390354182,
+        "defaulted_balance_declined": 0.09934782995561348,
+        "goods_declined": 0.009415792852557245,
+        "illustrative_profit": -16469041.560000002,
+        "illustrative_profit_index": -269.4952353071361,
+        "illustrative_profit_per_account": -2744.8402600000004
+      },
+      {
+        "cutoff": 0.76,
+        "approval_rate": 0.9838333333333333,
+        "default_rate_approved": 0.2124343554125021,
+        "defaulters_declined": 0.055011303692539565,
+        "defaulted_balance_declined": 0.03441701563649151,
+        "goods_declined": 0.005135887010485769,
+        "illustrative_profit": -19630594.44,
+        "illustrative_profit_index": -321.23008789266527,
+        "illustrative_profit_per_account": -3271.7657400000003
+      },
+      {
+        "cutoff": 0.77,
+        "approval_rate": 0.9885,
+        "default_rate_approved": 0.21514078570224246,
+        "defaulters_declined": 0.03843255463451394,
+        "defaulted_balance_declined": 0.01507951350177339,
+        "goods_declined": 0.003851915257864327,
+        "illustrative_profit": -20590104.900000002,
+        "illustrative_profit_index": -336.9312746469331,
+        "illustrative_profit_per_account": -3431.6841500000005
+      },
+      {
+        "cutoff": 0.78,
+        "approval_rate": 0.9921666666666666,
+        "default_rate_approved": 0.21636149840416596,
+        "defaulters_declined": 0.0293896006028636,
+        "defaulted_balance_declined": 0.00934289574061238,
+        "goods_declined": 0.0017119623368285898,
+        "illustrative_profit": -20826744.6,
+        "illustrative_profit_index": -340.80358691247517,
+        "illustrative_profit_per_account": -3471.1241000000005
+      },
+      {
+        "cutoff": 0.79,
+        "approval_rate": 0.9936666666666667,
+        "default_rate_approved": 0.2172089902717209,
+        "defaulters_declined": 0.024114544084400905,
+        "defaulted_balance_declined": 0.007829700792764472,
+        "goods_declined": 0.0012839717526214422,
+        "illustrative_profit": -20899042.5,
+        "illustrative_profit_index": -341.9866514825491,
+        "illustrative_profit_per_account": -3483.17375
+      },
+      {
+        "cutoff": 0.8,
+        "approval_rate": 0.9943333333333333,
+        "default_rate_approved": 0.21756620851491787,
+        "defaulters_declined": 0.02185380557648832,
+        "defaulted_balance_declined": 0.007759082451581575,
+        "goods_declined": 0.0010699764605178687,
+        "illustrative_profit": -20902317.0,
+        "illustrative_profit_index": -342.0402345732711,
+        "illustrative_profit_per_account": -3483.7195
+      }
+    ]
+  },
+  "fairness": {
+    "cutoff": 0.13,
+    "by_sex": [
+      {
+        "group": "Male",
+        "n": 2402,
+        "approval_rate": 0.42880932556203166,
+        "default_rate": 0.23355537052456288,
+        "default_rate_approved": 0.08737864077669903,
+        "approval_rate_goods": 0.5105920695274307
+      },
+      {
+        "group": "Female",
+        "n": 3598,
+        "approval_rate": 0.44969427459699834,
+        "default_rate": 0.21289605336297943,
+        "default_rate_approved": 0.09208899876390605,
+        "approval_rate_goods": 0.5187146892655368
+      }
+    ],
+    "by_age_band": [
+      {
+        "group": "21-29",
+        "n": 1912,
+        "approval_rate": 0.38859832635983266,
+        "default_rate": 0.223326359832636,
+        "default_rate_approved": 0.08344549125168237,
+        "approval_rate_goods": 0.4585858585858586
+      },
+      {
+        "group": "30-39",
+        "n": 2198,
+        "approval_rate": 0.494540491355778,
+        "default_rate": 0.20609645131938126,
+        "default_rate_approved": 0.08739650413983441,
+        "approval_rate_goods": 0.5684813753581662
+      },
+      {
+        "group": "40-49",
+        "n": 1341,
+        "approval_rate": 0.44742729306487694,
+        "default_rate": 0.232662192393736,
+        "default_rate_approved": 0.10166666666666667,
+        "approval_rate_goods": 0.5238095238095238
+      },
+      {
+        "group": "50+",
+        "n": 549,
+        "approval_rate": 0.3970856102003643,
+        "default_rate": 0.2459016393442623,
+        "default_rate_approved": 0.0963302752293578,
+        "approval_rate_goods": 0.4758454106280193
+      }
+    ],
+    "by_marital_status": [
+      {
+        "group": "Married",
+        "n": 2767,
+        "approval_rate": 0.4546440187929165,
+        "default_rate": 0.24141669678352007,
+        "default_rate_approved": 0.0945945945945946,
+        "approval_rate_goods": 0.5426393520724154
+      },
+      {
+        "group": "Single",
+        "n": 3158,
+        "approval_rate": 0.4325522482583914,
+        "default_rate": 0.20487650411652944,
+        "default_rate_approved": 0.08638360175695461,
+        "approval_rate_goods": 0.4970131421744325
+      },
+      {
+        "group": "Other",
+        "n": 75,
+        "approval_rate": 0.32,
+        "default_rate": 0.16,
+        "default_rate_approved": 0.08333333333333333,
+        "approval_rate_goods": 0.3492063492063492
+      }
+    ],
+    "adverse_impact_ratio_sex": 0.9535574495501792,
+    "adverse_impact_ratio_age": 0.7857765605693764,
+    "adverse_impact_ratio_marital_status": 0.7038473767885534,
+    "four_fifths_threshold": 0.8,
+    "age_gap_probe": [
+      {
+        "feature": "credit_limit",
+        "adverse_impact_ratio_age": 0.9356159912399845
+      },
+      {
+        "feature": "last_payment",
+        "adverse_impact_ratio_age": 0.8730999417403739
+      },
+      {
+        "feature": "util_current",
+        "adverse_impact_ratio_age": 0.8196929097251966
+      },
+      {
+        "feature": "util_avg_6m",
+        "adverse_impact_ratio_age": 0.8190508977278745
+      },
+      {
+        "feature": "pay_ratio",
+        "adverse_impact_ratio_age": 0.7992528937482821
+      },
+      {
+        "feature": "worst_status_6m",
+        "adverse_impact_ratio_age": 0.7889090600058586
+      },
+      {
+        "feature": "months_paid_full",
+        "adverse_impact_ratio_age": 0.7865001117301218
+      },
+      {
+        "feature": "recent_status",
+        "adverse_impact_ratio_age": 0.7857765605693764
+      },
+      {
+        "feature": "months_late_6m",
+        "adverse_impact_ratio_age": 0.785054339465912
+      },
+      {
+        "feature": "util_trend",
+        "adverse_impact_ratio_age": 0.7819704715427034
+      },
+      {
+        "feature": "months_since_late",
+        "adverse_impact_ratio_age": 0.7691078250474285
+      },
+      {
+        "feature": "months_zero_balance",
+        "adverse_impact_ratio_age": 0.7663877266387727
+      }
+    ],
+    "median_credit_limit_by_age_band": {
+      "21-29": 90000.0,
+      "30-39": 180000.0,
+      "40-49": 160000.0,
+      "50+": 110000.0
+    }
+  },
+  "reasons": {
+    "reference": {
+      "credit_limit": 210000.0,
+      "recent_status": 0.0,
+      "worst_status_6m": 0.0,
+      "months_late_6m": 0.0,
+      "months_since_late": 6.0,
+      "util_current": 0.21369999647140503,
+      "util_avg_6m": 0.20430000126361847,
+      "util_trend": 0.014800000004470348,
+      "pay_ratio": 0.19269999861717224,
+      "last_payment": 4800.0,
+      "months_paid_full": 0.0,
+      "months_zero_balance": 0.0
+    },
+    "agreement_with_pred_contribs": {
+      "n_compared": 500,
+      "top1_identical": 0.864,
+      "top1_in_shap_top4": 1.0,
+      "mean_top4_overlap": 0.8891666666666669,
+      "n_declined_in_test": 3352
+    },
+    "coverage_declined_test": {
+      "n_declined": 3352,
+      "n_without_any_reason": 0,
+      "n_with_fewer_than_four": 896,
+      "share_by_top_reason": {
+        "last_payment": 0.2798329355608592,
+        "months_since_late": 0.1840692124105012,
+        "worst_status_6m": 0.15304295942720764,
+        "credit_limit": 0.14826968973747018,
+        "recent_status": 0.13782816229116945,
+        "months_zero_balance": 0.05817422434367542,
+        "util_current": 0.026551312649164677,
+        "months_late_6m": 0.0065632458233890216,
+        "util_avg_6m": 0.00477326968973747,
+        "util_trend": 0.0005966587112171838,
+        "pay_ratio": 0.0002983293556085919
+      }
+    }
+  },
+  "psi": {
+    "train_vs_test": [
+      {
+        "variable": "score",
+        "psi": 0.001311245817734557,
+        "status": "stable"
+      },
+      {
+        "variable": "credit_limit",
+        "psi": 0.0018421810676189105,
+        "status": "stable"
+      },
+      {
+        "variable": "recent_status",
+        "psi": 0.0017963870619917615,
+        "status": "stable"
+      },
+      {
+        "variable": "worst_status_6m",
+        "psi": 0.001540814396707329,
+        "status": "stable"
+      },
+      {
+        "variable": "months_late_6m",
+        "psi": 0.0008762305384853749,
+        "status": "stable"
+      },
+      {
+        "variable": "months_since_late",
+        "psi": 0.0009890669810953645,
+        "status": "stable"
+      },
+      {
+        "variable": "util_current",
+        "psi": 0.002093232678944302,
+        "status": "stable"
+      },
+      {
+        "variable": "util_avg_6m",
+        "psi": 0.00262679485742456,
+        "status": "stable"
+      },
+      {
+        "variable": "util_trend",
+        "psi": 0.0011576361374687452,
+        "status": "stable"
+      },
+      {
+        "variable": "pay_ratio",
+        "psi": 0.0013429107570543072,
+        "status": "stable"
+      },
+      {
+        "variable": "last_payment",
+        "psi": 0.001995364692347008,
+        "status": "stable"
+      },
+      {
+        "variable": "months_paid_full",
+        "psi": 0.0014859899867690702,
+        "status": "stable"
+      },
+      {
+        "variable": "months_zero_balance",
+        "psi": 0.0009715527045714362,
+        "status": "stable"
+      }
+    ],
+    "test_vs_shifted": [
+      {
+        "variable": "score",
+        "psi": 0.040139731326086586,
+        "status": "stable"
+      },
+      {
+        "variable": "credit_limit",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "variable": "recent_status",
+        "psi": 0.048892478359128425,
+        "status": "stable"
+      },
+      {
+        "variable": "worst_status_6m",
+        "psi": 0.06205945865647649,
+        "status": "stable"
+      },
+      {
+        "variable": "months_late_6m",
+        "psi": 0.027582088617791694,
+        "status": "stable"
+      },
+      {
+        "variable": "months_since_late",
+        "psi": 0.03198971876628757,
+        "status": "stable"
+      },
+      {
+        "variable": "util_current",
+        "psi": 0.3211697596936489,
+        "status": "review"
+      },
+      {
+        "variable": "util_avg_6m",
+        "psi": 0.19846207028650042,
+        "status": "investigate"
+      },
+      {
+        "variable": "util_trend",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "variable": "pay_ratio",
+        "psi": 0.23800208650391885,
+        "status": "investigate"
+      },
+      {
+        "variable": "last_payment",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "variable": "months_paid_full",
+        "psi": 0.0,
+        "status": "stable"
+      },
+      {
+        "variable": "months_zero_balance",
+        "psi": 0.0,
+        "status": "stable"
+      }
+    ]
+  }
+}
