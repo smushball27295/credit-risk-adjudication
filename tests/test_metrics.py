@@ -78,3 +78,16 @@ def test_deciles_split_and_adverse_impact():
     assert adverse_impact_ratio(
         [{"approval_rate": 0.40}, {"approval_rate": 0.50}]
     ) == pytest.approx(0.8)
+
+
+def test_money_at_cutoff_counts_balances_and_scales_them():
+    import numpy as np
+
+    from creditadj.cutoff import money_at_cutoff
+
+    y = np.array([1, 1, 0, 0])
+    pd_hat = np.array([0.9, 0.1, 0.9, 0.1])
+    exposure = np.array([100.0, 300.0, 50.0, 50.0])
+    money = money_at_cutoff(y, pd_hat, exposure, 0.5, book_size=20)
+    assert money["defaulted_balance"] == 400.0 and money["defaulted_balance_declined"] == 100.0
+    assert money["share_declined"] == 0.25 and money["projected_defaulted_balance_declined"] == 500.0
