@@ -1,0 +1,158 @@
+{
+  "run_on": "22 November 2026",
+  "trials": 5,
+  "rows": [
+    {
+      "id": "A",
+      "planted": "none",
+      "title": "Nothing planted",
+      "runs": 5,
+      "caught": null,
+      "decision_ok": 5,
+      "checker_pass": 2,
+      "false_alarms": 0,
+      "mean_calls": 14,
+      "decisions": {
+        "approve_with_conditions": 5
+      },
+      "rules_decision": "approve_with_conditions",
+      "agrees_with_rules": 5
+    },
+    {
+      "id": "B",
+      "planted": "leakage",
+      "title": "Target leakage",
+      "runs": 5,
+      "caught": 5,
+      "decision_ok": 5,
+      "checker_pass": 2,
+      "false_alarms": 0,
+      "mean_calls": 11.4,
+      "decisions": {
+        "reject": 5
+      },
+      "rules_decision": "reject",
+      "agrees_with_rules": 5
+    },
+    {
+      "id": "C",
+      "planted": "overfit",
+      "title": "Overfitting",
+      "runs": 5,
+      "caught": 5,
+      "decision_ok": 5,
+      "checker_pass": 1,
+      "false_alarms": 0,
+      "mean_calls": 13.6,
+      "decisions": {
+        "reject": 5
+      },
+      "rules_decision": "reject",
+      "agrees_with_rules": 5
+    },
+    {
+      "id": "D",
+      "planted": "miscalibration",
+      "title": "Miscalibration",
+      "runs": 5,
+      "caught": 5,
+      "decision_ok": 5,
+      "checker_pass": 1,
+      "false_alarms": 0,
+      "mean_calls": 14,
+      "decisions": {
+        "approve_with_conditions": 4,
+        "reject": 1
+      },
+      "rules_decision": "reject",
+      "agrees_with_rules": 1
+    },
+    {
+      "id": "E",
+      "planted": "prohibited_inputs",
+      "title": "Prohibited inputs",
+      "runs": 5,
+      "caught": 5,
+      "decision_ok": 5,
+      "checker_pass": 2,
+      "false_alarms": 0,
+      "mean_calls": 14,
+      "decisions": {
+        "reject": 5
+      },
+      "rules_decision": "reject",
+      "agrees_with_rules": 5
+    },
+    {
+      "id": "F",
+      "planted": "drift",
+      "title": "Population drift",
+      "runs": 5,
+      "caught": 5,
+      "decision_ok": 5,
+      "checker_pass": 1,
+      "false_alarms": 0,
+      "mean_calls": 14,
+      "decisions": {
+        "reject": 5
+      },
+      "rules_decision": "approve_with_conditions",
+      "agrees_with_rules": 0
+    },
+    {
+      "id": "G",
+      "planted": "underperforms",
+      "title": "Underperforms the benchmark",
+      "runs": 5,
+      "caught": 5,
+      "decision_ok": 5,
+      "checker_pass": 5,
+      "false_alarms": 0,
+      "mean_calls": 12.6,
+      "decisions": {
+        "reject": 5
+      },
+      "rules_decision": "reject",
+      "agrees_with_rules": 5
+    },
+    {
+      "id": "H",
+      "planted": "test_contamination",
+      "title": "Test sample overlaps training",
+      "runs": 5,
+      "caught": 5,
+      "decision_ok": 5,
+      "checker_pass": 2,
+      "false_alarms": 0,
+      "mean_calls": 14,
+      "decisions": {
+        "approve_with_conditions": 5
+      },
+      "rules_decision": "reject",
+      "agrees_with_rules": 0
+    }
+  ],
+  "totals": {
+    "runs": 40,
+    "defect_runs": 35,
+    "caught": 35,
+    "decision_ok": 40,
+    "checker_pass": 16,
+    "mean_seconds": 7.8,
+    "mean_tokens": 15359,
+    "input_tokens": 537411,
+    "output_tokens": 76943,
+    "mean_rounds": 3.1,
+    "agrees_with_rules": 26
+  },
+  "problems": {
+    "by_kind": {
+      "number_not_cited": 27,
+      "unsupported_number": 7,
+      "inconsistent": 4
+    },
+    "memos_with_citation_slip": 19,
+    "memos_with_unsupported_number": 7,
+    "memos_with_inconsistent_decision": 4
+  }
+}
