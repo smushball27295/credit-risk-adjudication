@@ -386,6 +386,141 @@ def cmd_all(args) -> dict:
     return metrics
 
 
+def cmd_validate(args) -> dict:
+    """Review one submission, or all of them, with the rules baseline or the agent."""
+    from .candidates import build_candidates
+    from .validation import evidence_pack
+    from .validator import chat_from_env, check_memo, rules_memo, run_agent, score_memo
+
+    chat = chat_from_env() if args.agent else None
+    if args.agent and chat is None:
+        raise SystemExit("--agent needs VALIDATOR_LLM_API_KEY, VALIDATOR_LLM_BASE_URL and VALIDATOR_LLM_MODEL.")
+    results = {}
+    for c in build_candidates(args.seed, args.data_dir):
+        if args.submission not in ("all", c.id):
+            continue
+        pack = evidence_pack(c)
+        if chat is None:
+            memo, calls = rules_memo(pack), len(pack)
+            seen = {i["id"]: i["text"] for result in pack.values() for i in result["items"]}
+        else:
+            run = run_agent(pack, c.label, c.developer_summary, chat)
+            memo, calls, seen = run.memo or {"decision": None, "summary": "", "findings": []}, len(run.calls), run.seen
+        check, score = check_memo(memo, seen), score_memo(memo, c.planted)
+        results[c.id] = {"memo": memo, "check": check.to_dict(), "score": score}
+        print(f"\n{c.label}  ({'agent' if chat else 'rules baseline'}, {calls} test results read)")
+        print(f"  Developer: {c.developer_summary}")
+        print(f"  Decision: {memo['decision']}")
+        for f in memo["findings"]:
+            print(f"  [{f['severity']:6}] {f['title']}: {f['text']}  {' '.join('[' + e + ']' for e in f['evidence'])}")
+        print(f"  Checker: {'PASS' if check.passed else 'FAIL ' + '; '.join(p['detail'] for p in check.problems)}")
+        if args.reveal:
+            caught = {None: "nothing was planted", True: "caught", False: "MISSED"}[score["caught"]]
+            print(f"  Answer key: {c.planted.title}. {caught}. Decision defensible: {score['decision_ok']}.")
+    return results
+
+
+def cmd_score_runs(args) -> dict:
+    """Re-score the published agent runs against the answer key and print the summary."""
+    import statistics
+
+    from .candidates import build_candidates
+    from .validation import evidence_pack
+    from .validator import check_memo, lookup, rules_memo, score_memo
+
+    path = Path(args.reports_dir) / "agent_runs.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    runs = data["runs"]
+    rows, kinds = [], {}
+    for c in build_candidates(args.seed, args.data_dir):
+        pack = evidence_pack(c)
+        mine = [r for r in runs if r["submission"] == c.id]
+        for r in mine:
+            seen = {}
+            for entry in r["tests"]:  # "round:name" or "round:name:argument"
+                parts = entry.split(":", 2)
+                for item in lookup(pack, parts[1], parts[2] if len(parts) > 2 else None)["items"]:
+                    seen[item["id"]] = item["text"]
+            memo = r["memo"] or {}
+            r["checker"] = check_memo(memo, seen).to_dict()
+            r["score"] = score_memo(memo, c.planted)
+            for problem in r["checker"]["problems"]:
+                kinds[problem["kind"]] = kinds.get(problem["kind"], 0) + 1
+        decisions: dict[str, int] = {}
+        for r in mine:
+            decision = (r["memo"] or {}).get("decision")
+            decisions[decision] = decisions.get(decision, 0) + 1
+        rules_decision = rules_memo(pack)["decision"]
+        rows.append(
+            {
+                "id": c.id,
+                "planted": c.planted.key,
+                "title": c.planted.title,
+                "runs": len(mine),
+                "caught": None if c.planted.key == "none" else sum(1 for r in mine if r["score"]["caught"]),
+                "decision_ok": sum(1 for r in mine if r["score"]["decision_ok"]),
+                "checker_pass": sum(1 for r in mine if r["checker"]["passed"]),
+                "false_alarms": sum(r["score"]["false_alarms"] for r in mine),
+                "mean_calls": round(statistics.mean(r["test_runs"] for r in mine), 1),
+                "decisions": decisions,
+                "rules_decision": rules_decision,
+                "agrees_with_rules": decisions.get(rules_decision, 0),
+            }
+        )
+
+    def memos_with(kind: str) -> int:
+        return sum(1 for r in runs if any(p["kind"] == kind for p in r["checker"]["problems"]))
+
+    summary = {
+        "run_on": data["about"].get("run_on_text", "22 November 2026"),
+        "trials": max(r["trial"] for r in runs),
+        "rows": rows,
+        "totals": {
+            "runs": len(runs),
+            "defect_runs": sum(row["runs"] for row in rows if row["planted"] != "none"),
+            "caught": sum(row["caught"] or 0 for row in rows),
+            "decision_ok": sum(row["decision_ok"] for row in rows),
+            "checker_pass": sum(row["checker_pass"] for row in rows),
+            "mean_seconds": round(statistics.mean(r["seconds"] for r in runs), 1),
+            "mean_tokens": round(statistics.mean(r["input_tokens"] + r["output_tokens"] for r in runs)),
+            "input_tokens": sum(r["input_tokens"] for r in runs),
+            "output_tokens": sum(r["output_tokens"] for r in runs),
+            "mean_rounds": round(statistics.mean(r["rounds"] for r in runs), 1),
+            "agrees_with_rules": sum(row["agrees_with_rules"] for row in rows),
+        },
+        "problems": {
+            "by_kind": kinds,
+            "memos_with_citation_slip": memos_with("number_not_cited"),
+            "memos_with_unsupported_number": memos_with("unsupported_number"),
+            "memos_with_inconsistent_decision": memos_with("inconsistent"),
+        },
+    }
+    out = Path(args.reports_dir) / "agent_eval.json"
+    out.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+    t = summary["totals"]
+    print(f"{t['runs']} agent runs, {summary['trials']} per submission")
+    print(f"  planted defect caught:        {t['caught']} of {t['defect_runs']}")
+    print(f"  defensible decision:          {t['decision_ok']} of {t['runs']}")
+    print(f"  same decision as fixed rules: {t['agrees_with_rules']} of {t['runs']}")
+    print(f"  memo passed the checker:      {t['checker_pass']} of {t['runs']}")
+    print(f"  checker problems by kind:     {kinds}")
+    print(f"  mean run: {t['mean_seconds']} s, {t['mean_tokens']:,} tokens, {t['mean_rounds']} rounds")
+    for row in rows:
+        caught = "no false alarm" if row["caught"] is None and not row["false_alarms"] else f"{row['false_alarms']} false alarms" if row["caught"] is None else f"caught {row['caught']}/{row['runs']}"
+        print(f"  {row['id']}  {row['title']:32} {caught:16} decisions {row['decisions']}  rules: {row['rules_decision']}")
+    print(f"Wrote {out}")
+    return summary
+
+
+def cmd_export_validation(args) -> dict:
+    from .export import build_validation_payload, write_validation_payload
+
+    path = Path(args.web_dir) / "validation.json"
+    size = write_validation_payload(build_validation_payload(args.seed), path)
+    print(f"Wrote {path} ({size / 1000:.1f} kB)")
+    return {"path": str(path), "bytes": size}
+
+
 COMMANDS = {
     "train": (cmd_train, "fit the champion and benchmark, print the fit summary"),
     "evaluate": (cmd_evaluate, "test-set metrics, deciles, calibration, comparison models"),
@@ -394,6 +529,9 @@ COMMANDS = {
     "fairness": (cmd_fairness, "approval rates by sex, age band and marital status"),
     "monitor": (cmd_monitor, "PSI against train and against a shifted copy"),
     "export-web": (cmd_export_web, "write web_export/model.json"),
+    "validate": (cmd_validate, "review a submission with the rules baseline or the validation agent"),
+    "export-validation": (cmd_export_validation, "write web_export/validation.json for the agent demo"),
+    "score-runs": (cmd_score_runs, "re-score the published agent runs in reports/agent_runs.json"),
     "all": (cmd_all, "run everything and write reports/ and web_export/"),
 }
 
@@ -431,6 +569,10 @@ def make_parser() -> argparse.ArgumentParser:
         p = sub.add_parser(name, parents=[common], help=description)
         if name == "explain":
             p.add_argument("--row", type=int, required=True, help="0-based row of the test set")
+        if name == "validate":
+            p.add_argument("--submission", default="all", help="A to H, or all")
+            p.add_argument("--agent", action="store_true", help="use the language-model agent instead of the rules baseline")
+            p.add_argument("--reveal", action="store_true", help="show the answer key after each review")
     return parser
 
 

@@ -295,3 +295,54 @@ def write_payload(payload: dict, path: Path | str) -> int:
         raise RuntimeError(f"Export is {len(text)} bytes, over the {MAX_BYTES} limit.")
     path.write_text(text + "\n", encoding="utf-8")
     return path.stat().st_size
+
+
+def build_validation_payload(seed: int | None = None) -> dict:
+    """Everything the web demo needs to run the validation agent.
+
+    For each submission: the developer's summary, the full evidence pack that
+    tool calls are served from, the rules baseline's memo, and the answer key.
+    The answer key is shown to the visitor after a run. It is never sent to
+    the language model.
+    """
+    from . import SEED
+    from .candidates import build_candidates
+    from .validation import FAIRNESS_ATTRIBUTES, TESTS, evidence_pack
+    from .validator import MAX_TOOL_CALLS, SYSTEM_PROMPT, TOOLS, check_memo, rules_memo, score_memo
+
+    submissions = []
+    for c in build_candidates(SEED if seed is None else seed):
+        pack = evidence_pack(c)
+        memo = rules_memo(pack)
+        seen = {i["id"]: i["text"] for result in pack.values() for i in result["items"]}
+        submissions.append(
+            {
+                "id": c.id,
+                "label": c.label,
+                "developer_summary": c.developer_summary,
+                "inputs": list(c.columns),
+                "pack": pack,
+                "rules": {"memo": memo, "check": check_memo(memo, seen).to_dict(), "score": score_memo(memo, c.planted)},
+                "planted": {
+                    "key": c.planted.key,
+                    "title": c.planted.title,
+                    "explanation": c.planted.explanation,
+                    "evidence_prefixes": list(c.planted.evidence_prefixes),
+                },
+            }
+        )
+    return {
+        "system_prompt": SYSTEM_PROMPT,
+        "max_tool_calls": MAX_TOOL_CALLS,
+        "tools": TOOLS,
+        "tests": [{"name": name, "description": desc, "argument": arg} for name, (desc, arg) in TESTS.items()],
+        "fairness_attributes": list(FAIRNESS_ATTRIBUTES),
+        "submissions": submissions,
+    }
+
+
+def write_validation_payload(payload: dict, path: Path | str) -> int:
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, separators=(",", ":"), allow_nan=False) + "\n", encoding="utf-8")
+    return path.stat().st_size
