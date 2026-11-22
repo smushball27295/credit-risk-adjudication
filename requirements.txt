@@ -1,0 +1,10 @@
+# Results in the README were produced with Python 3.13.18 and:
+# numpy 2.5.3, pandas 3.0.5, scikit-learn 1.9.1, xgboost 3.4.1,
+# matplotlib 3.11.2, xlrd 2.0.2, pytest 9.1.1
+numpy>=1.26
+pandas>=2.2
+scikit-learn>=1.4
+xgboost>=2.1
+matplotlib>=3.8
+xlrd>=2.0.1
+pytest>=8.0
