@@ -202,6 +202,16 @@ def _print_cutoff(art: Artifacts, sensitivity: list[dict]) -> None:
         f"and {_pct(t['goods_declined'])} of good accounts; profit index {t['illustrative_profit_index']:.1f}"
     )
     print(f"  best cutoff on the test set itself: {cutoff_mod.best_cutoff(art.cutoff_test):.2f}")
+    te = art.split.test
+    money = cutoff_mod.money_at_cutoff(art.y[te], art.pd[te], art.exposure[te], rec, len(art.y))
+    print(
+        f"  in money:   the declined defaulters hold NT${money['defaulted_balance_declined'] / 1e6:.1f}M of the "
+        f"NT${money['defaulted_balance'] / 1e6:.1f}M in defaulted balances on the test set ({_pct(money['share_declined'])})"
+    )
+    print(
+        f"              scaled from {money['sample_accounts']:,} test accounts to the {money['book_accounts']:,}-account book "
+        f"(NT${art.raw['LIMIT_BAL'].sum() / 1e9:.2f}B in credit lines): about NT${money['projected_defaulted_balance_declined'] / 1e6:.0f}M"
+    )
     print("\nSensitivity: cutoff that maximises the profit view on validation, read on test")
     print(pd.DataFrame(sensitivity).to_string(index=False, float_format=lambda v: f"{v:.3f}"))
 

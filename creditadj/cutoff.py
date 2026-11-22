@@ -134,3 +134,27 @@ def sensitivity(
             }
         )
     return rows
+
+
+def money_at_cutoff(y: np.ndarray, pd_hat: np.ndarray, exposure: np.ndarray, cutoff: float, book_size: int) -> dict:
+    """The cutoff in money: defaulted balances it declines on a sample, and that scaled to the whole book.
+
+    The sample figures are counted. The projection multiplies them by
+    book_size / sample size, which is fair only because the sample is a random
+    draw from the book. It is a scale-up, not a forecast.
+    """
+    y = np.asarray(y)
+    exposure = np.asarray(exposure, dtype=np.float64)
+    defaulted = y == 1
+    declined = np.asarray(pd_hat) >= cutoff
+    total = float(exposure[defaulted].sum())
+    caught = float(exposure[defaulted & declined].sum())
+    scale = book_size / len(y)
+    return {
+        "sample_accounts": int(len(y)),
+        "defaulted_balance": total,
+        "defaulted_balance_declined": caught,
+        "share_declined": caught / total if total else float("nan"),
+        "book_accounts": int(book_size),
+        "projected_defaulted_balance_declined": caught * scale,
+    }
