@@ -2,6 +2,8 @@
 
 A default model for credit card accounts, plus the parts a lender needs before it can use one: where to put the approval cutoff and what that costs, why an applicant was declined, whether outcomes differ by sex or age, and what to monitor afterwards.
 
+An AI agent then validates it. The second half of this repo is a language-model agent that reviews a submitted model the way an independent validator would: it chooses which tests to run, reads the evidence, and drafts a validation memo. A checker written in ordinary code confirms that every number in the memo is in the evidence it cites. The agent is measured on eight submissions, seven of which have a defect planted on purpose. See [The validation agent](#the-validation-agent).
+
 Live demo: https://ram-balasubramani.vercel.app/demo/credit
 
 Portfolio: https://ram-balasubramani.vercel.app
@@ -47,10 +49,13 @@ creditadj/
   export.py     web_export/model.json
   pipeline.py   fits everything once and collects the numbers
   plots.py      the four charts
+  candidates.py eight model submissions, seven with a planted defect
+  validation.py the validation tests and the evidence they return
+  validator.py  the validation agent, the memo checker, the scoring
   cli.py        python -m creditadj ...
-tests/          15 tests
-reports/        metrics.json and four PNG charts (committed)
-web_export/     model.json, the model as plain JSON for the browser demo (committed)
+tests/          the model tests and the validation agent's tests
+reports/        metrics.json, four PNG charts, and the 40 raw agent runs with their summary (committed)
+web_export/     model.json and validation.json, what the browser demo reads (committed)
 MODEL_CARD.md
 ```
 
@@ -316,6 +321,102 @@ Monitoring plan, if this were live:
 
 Triggers I would propose for an early review: score PSI of 0.25 or more, a fall in AUC of more than 0.03 from development, or an adverse-impact ratio below 0.80 for two quarters running.
 
+## The validation agent
+
+Before a bank uses a model, someone independent has to try to break it. US supervisory guidance has asked for three things from that review since 2011, and still does in SR 26-2, which replaced SR 11-7 in April 2026: conceptual soundness, outcomes analysis and ongoing monitoring. Much of the work is running a known set of tests and writing up what they show, which is the kind of work a language model can draft. The risk is a fluent memo with a wrong number in it.
+
+So the design splits the work three ways:
+
+- **Tests are code.** `creditadj/validation.py` has eleven tests (performance, benchmark, calibration, rank ordering, inputs, feature detail, data integrity, stability, fairness, sensitivity, cutoff). Each returns evidence items: an id and one sentence with the measured numbers in it. A test reports what was measured and the usual convention for reading it. It never says whether the result is acceptable.
+- **The agent decides and writes.** `creditadj/validator.py` gives a language model the developer's summary and one tool, `run_test`. It chooses the tests, follows up what looks odd (for example, looking up the data dictionary entry of an input that dominates the model), and ends by calling `submit_memo` with a decision and findings. It has at most 14 test runs.
+- **A checker verifies the memo.** `check_memo` asks no model anything. Every finding must cite evidence the agent was actually shown. Every number in a finding must appear in the evidence that finding cites. The decision must follow from the severities.
+
+The memo is a draft for a human validator to sign. Nothing here approves a model.
+
+### The number policy
+
+A number in the memo is supported if it equals a number in the cited evidence, or that number rounded to fewer decimals, ties to even. Signs and percent signs are ignored. Nothing else is accepted: 0.786 does not support "79%", and adding two figures together is not allowed. Whole numbers from 0 to 10 are not checked, because they are usually counts in the memo's own prose. Names of regulations such as SR 26-2 are not read as numbers.
+
+When a number fails, the checker says which way. `number_not_cited` means the figure is somewhere in what the agent was shown but not in what the finding cites, which is usually a citation slip. `unsupported_number` means it is nowhere in the evidence: invented, or worked out by the agent.
+
+The rounding policy has its own tests (`tests/test_validator.py`), because a checker that is too strict or too loose changes every result below.
+
+### Eight submissions, seven planted defects
+
+`creditadj/candidates.py` builds eight models. All are really fitted on the UCI data, and every number the tests report about them is computed from that fit.
+
+| Submission | What was planted | What reveals it |
+|---|---|---|
+| A | Nothing. This is the champion | |
+| B | Target leakage: an input written in the month the outcome is measured | The input's gain share and its data dictionary entry |
+| C | Overfitting: 800 trees of depth 9 | Training AUC 1.000 against 0.735 on test |
+| D | Miscalibration: defaults up-weighted and never corrected | Mean predicted 45.3% against 22.1% observed |
+| E | Prohibited inputs: age, sex and marital status used directly | The input list |
+| F | Population drift: a sound model, a book that has moved | Stability index of 3.360 on one input |
+| G | Underperforms: three inputs, twenty stumps | 0.117 AUC below a plain logistic regression |
+| H | Contaminated test set: half the test rows were used in training | 3,000 of 6,000 test accounts overlap |
+
+Each submission carries the developer's own summary, which never mentions the defect, and a hidden answer key. The agent sees the summary and the tests. It never sees the key.
+
+### Results: 40 live runs
+
+I ran each submission five times through the live agent on 22 November 2026 and scored every memo against the answer key. A defect counts as caught only if a high or medium finding cites the evidence that reveals it. Rejecting for a different reason does not count. All 40 raw memos are in [`reports/agent_runs.json`](reports/agent_runs.json), and `python -m creditadj score-runs` reproduces the table from them.
+
+| | Result |
+|---|---|
+| Planted defect caught | 35 of 35 runs |
+| High-severity finding on the sound model | 0 in 5 runs |
+| Defensible decision (not "approve" on a defective model, not "reject" on the sound one) | 40 of 40 |
+| Same decision as the fixed-threshold baseline | 26 of 40 |
+| Memo passed the checker | 16 of 40 |
+| Average run | 7.8 seconds, about 15,400 tokens, 3.1 rounds |
+
+| Submission | Caught | Agent decided | Fixed rules decide | Checker passed |
+|---|---|---|---|---|
+| A, nothing planted | no false alarm | approve with conditions 5 | approve with conditions | 2 of 5 |
+| B, leakage | 5 of 5 | reject 5 | reject | 2 of 5 |
+| C, overfitting | 5 of 5 | reject 5 | reject | 1 of 5 |
+| D, miscalibration | 5 of 5 | approve with conditions 4, reject 1 | reject | 1 of 5 |
+| E, prohibited inputs | 5 of 5 | reject 5 | reject | 2 of 5 |
+| F, drift | 5 of 5 | reject 5 | approve with conditions | 1 of 5 |
+| G, underperforms | 5 of 5 | reject 5 | reject | 5 of 5 |
+| H, contaminated test set | 5 of 5 | approve with conditions 5 | reject | 2 of 5 |
+
+### What the results say
+
+The agent found every planted defect and raised no false alarm on the sound model. Its memos are less reliable than its findings, and the checker is what shows that:
+
+- **19 memos quoted a real figure but cited the wrong evidence for it** (27 instances). A typical case: a finding quotes the 0.80 screen without citing the note that states it.
+- **7 memos stated a figure the agent had worked out itself.** I read all seven. Each one adds two or three gain shares together ("about 65% of total gain"). The sums look right, but the instructions say not to do arithmetic, and a checker cannot confirm a number that is in no evidence.
+- **4 memos contradicted themselves.** All four are on submission D: a high-severity finding on calibration, then a recommendation to approve with conditions. The rule in the prompt is that any high finding means reject.
+- **Severity is where it disagrees with me.** On the contaminated test set it noticed the overlap in all five runs and rated it medium in all five. I would reject: a test set that shares half its rows with training is not a test set. On drift it was stricter than the fixed rules.
+
+### How to read these numbers
+
+- **The defects are loud.** I planted them and wrote the tests, so every defect is one the evidence can reveal. A catch rate of 35 of 35 says this set is too easy to rank one model against another. Real validation turns up problems nobody thought to test for.
+- **Five runs per submission is a small sample.** The same agent on the same input does not always give the same memo. Treat every rate here as rough.
+- **The baseline is not independent.** The fixed-threshold baseline (`rules_memo`) was written by the same person who planted the defects, so it catches all of them. It is there to show what the evidence supports, not as a competitor.
+- **One measurement run was thrown away.** In the first run the agent returned citations as "[PERF-GAP] sentence" and my scorer only accepted the bare id, so correct findings were scored as misses. That was a bug in the harness. I changed it to read the id off the front (`clean_evidence_id`, with a test) and ran all 40 again. The numbers above are the second run, complete.
+- **The answer key was widened once.** For submission E the agent cited the input list and the fairness test's line on demographic inputs. Both reveal the defect, and my first key did not list them. The change is marked in `candidates.py`.
+- **The checker checks numbers and citations, not judgement.** A memo can pass it and still be wrong about what matters.
+- **The live demo and the Python loop are two implementations of one design.** The measured runs went through the live demo's loop, which calls a hosted model. The Python loop in `validator.py` speaks to any chat-completions endpoint with tool calling and is tested here against a scripted stand-in (`tests/test_validator.py`). The checker exists in both and the two were compared on 328 clean and tampered memos: 965 problems each, no differences.
+
+### Run it
+
+```bash
+# the fixed-threshold baseline on every submission, with the answer key
+python -m creditadj validate --reveal
+
+# the agent on one submission (any chat-completions endpoint with tool calling)
+export VALIDATOR_LLM_API_KEY=...
+export VALIDATOR_LLM_BASE_URL=https://your-endpoint/v1
+export VALIDATOR_LLM_MODEL=your-model
+python -m creditadj validate --agent --submission B --reveal
+
+# re-score the published runs
+python -m creditadj score-runs
+```
+
 ## Web export
 
 `python -m creditadj export-web` writes [`web_export/model.json`](web_export/model.json) (120.5 kB): the trees, feature definitions, cutoff grid, metrics, fairness tables, reason texts and five preset applicants from the test set with the probability the Python model gives each.
@@ -358,7 +459,7 @@ python -m creditadj fairness       # approval by sex, age band, marital status
 python -m creditadj monitor        # PSI tables
 python -m creditadj export-web     # web_export/model.json
 
-python -m pytest                   # 15 tests
+python -m pytest                   # 50 tests
 ```
 
 The first command downloads the dataset (5.5 MB) into `data/`. Fitting takes about a second, so every command refits from the cached data with the fixed seed. There is no saved model to go stale.
