@@ -1,0 +1,10 @@
+# The dataset is downloaded at run time and never committed.
+data/
+
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+.DS_Store
